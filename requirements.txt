@@ -1,0 +1,6 @@
+XlsxWriter==1.1.2
+openpyxl==2.5.12
+pandas==0.23.4
+numpy==1.15.4
+xlrd==1.1.0
+Pillow==5.3.0
