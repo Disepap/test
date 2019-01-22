@@ -1,7 +1,7 @@
-from openpyxl import load_workbook
+from openpyxl import load_workbook, drawing
 import pandas as pd
 from xlrd import open_workbook
-import threading
+from tkinter.messagebox import showerror, showwarning, showinfo
 import PIL
 import json
 
@@ -11,14 +11,17 @@ class ExpenseLog :
     def __init__(self):
 
         self.foodPrice = dict()
+        self.lineNumber = 0
+        self.personNumber = 0
 
-    def foodData(self, dej, din, soup, milV, milCV):
+    def foodData(self, dej, din, soup, milV, milCV, prov):
         
         self.foodPrice["Déjeuner"] = dej
         self.foodPrice["Dîner"] = din
         self.foodPrice["Souper"] = soup
         self.foodPrice["V"] = milV
         self.foodPrice["CV"] = milCV
+        self.foodPrice["Prov"] = prov
         
     def processExpLog(self, log_Rea, depense_Paquet):
 
@@ -40,15 +43,18 @@ class ExpenseLog :
                 
                 for index, row in travLogR.iterrows() :
                     s = 13
-
+                    
                     if row[headers[head]] == 'R':
                         depenseSheets = wb.sheetnames
                         if row[headers[0]] not in depenseSheets:
                             sheetLocal = wb['Temp']
                             localOne = wb.copy_worksheet(sheetLocal)
                             localOne.title = row[headers[0]]
+                            imgs = drawing.image.Image('logo.png')
+                            localOne.add_image(imgs)
+                            localOne.sheet_view.zoomScale = 65
                             #wb.save(depense_Paquet)
-
+                        self.lineNumber += 1
                         sheet= wb[row[headers[0]]]
                         j,m,a = headers[head].split()
                         monthNum = months.index(m)
@@ -58,13 +64,13 @@ class ExpenseLog :
                             s += occurName
                         else:
                             s = 13
-                    
+                        
                         sheet.cell(row=4,column=11).value = row[headers[0]]
                         
                         sheet.cell(row=s,column=2).value = int(j)
                         sheet.cell(row=s,column=3).value = monthNum + 1
                         sheet.cell(row=s,column=4).value = int(a)
-                        sheet.cell(row=s,column=6).value = 'Québec'
+                        sheet.cell(row=s,column=6).value = self.foodPrice["Prov"]
                         sheet.cell(row=s,column=7).value = 'Repas (per diem)'
 
                         sheet.cell(row=s,column=14).value = int(self.foodPrice["Déjeuner"])
@@ -73,12 +79,12 @@ class ExpenseLog :
 
                         numOccur.append(row[headers[0]])
 
-                    #  wb.save(depense_Paquet)
+                    #wb.save(depense_Paquet)
 
             except :
 
 
-                print(data[headers[head]])
+                Warning(data[headers[head]])
 
             try :
 
@@ -93,8 +99,11 @@ class ExpenseLog :
                             sheetLocal = wb['Temp']
                             localOne = wb.copy_worksheet(sheetLocal)
                             localOne.title = row[headers[0]]
+                            imgs = drawing.image.Image('logo.png')
+                            localOne.add_image(imgs)
+                            localOne.sheet_view.zoomScale = 65
                             #wb.save(depense_Paquet)
-
+                        self.lineNumber += 1
                         sheet= wb[row[headers[0]]]
                         j,m,a = headers[head].split()
                         monthNum = months.index(m)
@@ -110,7 +119,7 @@ class ExpenseLog :
                         sheet.cell(row=s,column=2).value = int(j)
                         sheet.cell(row=s,column=3).value = monthNum + 1
                         sheet.cell(row=s,column=4).value = int(a)
-                        sheet.cell(row=s,column=6).value = 'Québec'
+                        sheet.cell(row=s,column=6).value = self.foodPrice["Prov"]
                         sheet.cell(row=s,column=7).value = 'Mileage'
 
                         sheet.cell(row=s,column=10).value = int(self.foodPrice["V"])
@@ -120,7 +129,7 @@ class ExpenseLog :
 
             except :
 
-                print(data[headers[head]])
+                Warning(data[headers[head]])
 
 
             try :
@@ -137,8 +146,11 @@ class ExpenseLog :
                             sheetLocal = wb['Temp']
                             localOne = wb.copy_worksheet(sheetLocal)
                             localOne.title = row[headers[0]]
+                            imgs = drawing.image.Image('logo.png')
+                            localOne.add_image(imgs)
+                            localOne.sheet_view.zoomScale = 65
                             #wb.save(depense_Paquet)
-
+                        self.lineNumber += 1
                         sheet= wb[row[headers[0]]]
                         j,m,a = headers[head].split()
                         monthNum = months.index(m)
@@ -155,7 +167,7 @@ class ExpenseLog :
                         sheet.cell(row=s,column=2).value = int(j)
                         sheet.cell(row=s,column=3).value = monthNum + 1
                         sheet.cell(row=s,column=4).value = int(a)
-                        sheet.cell(row=s,column=6).value = 'Québec'
+                        sheet.cell(row=s,column=6).value = self.foodPrice["Prov"]
                         sheet.cell(row=s,column=7).value = 'Mileage'
 
                         sheet.cell(row=s,column=13).value = int(self.foodPrice["CV"])
@@ -166,8 +178,31 @@ class ExpenseLog :
 
 
             except:
-                print(data[headers[head]])
+                Warning(data[headers[head]])
+
+        self.personNumber  = len(wb.sheetnames) - 2
+
+        try:
+            sheetToRemove = wb['Temp']
+            wb.remove_sheet(sheetToRemove)
+            
+            depenseSheets = wb.sheetnames
+            annexeSheet = wb['Annexe']
+            l = 10
+            for sheett in depenseSheets[2:]:
+                
+                annexeSheet.cell(row=l,column=1).value  =  sheett
+                annexeSheet.cell(row=l,column=2).value  = sheett
+                annexeSheet.cell(row=l,column=4).value  = "='" + sheett + "'" + "!" + "X216"
+                 # frm = "=SUMIF(" + sheett + "!" + "R:R;" + ">0;" + sheett +  "!X:X)"
+                annexeSheet.cell(row=l,column=5).value  = "='" + sheett + "'" + "!" + "X218"
+                annexeSheet.cell(row=l,column=6).value  = "='" + sheett + "'" + "!" + "X220"
+                l += 1
+            wb.save(depense_Paquet)
+            
+        except:
+            Warning("Veuillez le fichier a traiter")
 
 
-        wb.save(depense_Paquet)
+        
         
