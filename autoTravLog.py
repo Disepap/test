@@ -122,6 +122,10 @@ class ExpenseLog :
                         sheet.cell(row=s,column=6).value = self.foodPrice["Prov"]
                         sheet.cell(row=s,column=7).value = 'Mileage'
 
+                        sheet.cell(row=s,column=14).value = int(self.foodPrice["Déjeuner"])
+                        sheet.cell(row=s,column=15).value = int(self.foodPrice["Dîner"])
+                        sheet.cell(row=s,column=16).value = int(self.foodPrice["Souper"])
+
                         sheet.cell(row=s,column=10).value = int(self.foodPrice["V"])
 
                         numOccur.append(row[headers[0]])
@@ -170,6 +174,10 @@ class ExpenseLog :
                         sheet.cell(row=s,column=6).value = self.foodPrice["Prov"]
                         sheet.cell(row=s,column=7).value = 'Mileage'
 
+                        sheet.cell(row=s,column=14).value = int(self.foodPrice["Déjeuner"])
+                        sheet.cell(row=s,column=15).value = int(self.foodPrice["Dîner"])
+                        sheet.cell(row=s,column=16).value = int(self.foodPrice["Souper"])
+
                         sheet.cell(row=s,column=13).value = int(self.foodPrice["CV"])
 
                         numOccur.append(row[headers[0]])
@@ -183,8 +191,8 @@ class ExpenseLog :
         self.personNumber  = len(wb.sheetnames) - 2
 
         try:
-            sheetToRemove = wb['Temp']
-            wb.remove_sheet(sheetToRemove)
+            #sheetToRemove = wb['Temp']
+            #wb.remove_sheet(sheetToRemove)
             
             depenseSheets = wb.sheetnames
             annexeSheet = wb['Annexe']
