@@ -122,11 +122,22 @@ class ExpenseLog :
                         sheet.cell(row=s,column=6).value = self.foodPrice["Prov"]
                         sheet.cell(row=s,column=7).value = 'Mileage'
 
+                       
+                        sheet.cell(row=s,column=10).value = int(self.foodPrice["V"])
+                        numOccur.append(row[headers[0]])
+
+                        s += 1
+
+                        sheet.cell(row=s,column=2).value = int(j)
+                        sheet.cell(row=s,column=3).value = monthNum + 1
+                        sheet.cell(row=s,column=4).value = int(a)
+                        sheet.cell(row=s,column=6).value = self.foodPrice["Prov"]
+                        sheet.cell(row=s,column=7).value = 'Repas (per diem)'
+
                         sheet.cell(row=s,column=14).value = int(self.foodPrice["Déjeuner"])
                         sheet.cell(row=s,column=15).value = int(self.foodPrice["Dîner"])
                         sheet.cell(row=s,column=16).value = int(self.foodPrice["Souper"])
 
-                        sheet.cell(row=s,column=10).value = int(self.foodPrice["V"])
 
                         numOccur.append(row[headers[0]])
                     # wb.save(depense_Paquet)
@@ -174,11 +185,21 @@ class ExpenseLog :
                         sheet.cell(row=s,column=6).value = self.foodPrice["Prov"]
                         sheet.cell(row=s,column=7).value = 'Mileage'
 
+                        sheet.cell(row=s,column=13).value = int(self.foodPrice["CV"])
+
+                        s += 1
+                        
+                        numOccur.append(row[headers[0]])
+                        sheet.cell(row=s,column=2).value = int(j)
+                        sheet.cell(row=s,column=3).value = monthNum + 1
+                        sheet.cell(row=s,column=4).value = int(a)
+                        sheet.cell(row=s,column=6).value = self.foodPrice["Prov"]
+                        sheet.cell(row=s,column=7).value = 'Repas (per diem)'
+
                         sheet.cell(row=s,column=14).value = int(self.foodPrice["Déjeuner"])
                         sheet.cell(row=s,column=15).value = int(self.foodPrice["Dîner"])
                         sheet.cell(row=s,column=16).value = int(self.foodPrice["Souper"])
 
-                        sheet.cell(row=s,column=13).value = int(self.foodPrice["CV"])
 
                         numOccur.append(row[headers[0]])
                     # wb.save(depense_Paquet)
